@@ -1,0 +1,7 @@
+order_id,customer_name,phone,sku,qty,city,status,order_date,delivered_date,courier,tracking_no,total
+10231,Ali Raza,03001234567,SKU0002,1,Lahore,Shipped,2026-10-15,,TCS,TCS884201,2749
+10198,Sana Malik,03214567890,SKU0301,1,Gujranwala,Delivered,2026-10-11,2026-10-14,TCS,TCS771903,2049
+10120,Hamza Tariq,03335551234,SKU0046,1,Lahore,Delivered,2026-10-11,2026-10-14,Leopards,LEO550118,1700
+10044,Ayesha Khan,03451239876,SKU0202,1,Faisalabad,Delivered,2026-10-02,2026-10-05,TCS,TCS660327,4749
+10150,Fatima Noor,03111234567,SKU0435,1,Karachi,Delivered,2026-10-10,2026-10-13,Leopards,LEO550902,4349
+10265,Bilal Ahmed,03007654321,SKU0107,2,Gujranwala,Placed,2026-10-17,,,,3248

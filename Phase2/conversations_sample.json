@@ -1,0 +1,826 @@
+{
+ "_note": "Customer turns only. Agent replies are produced by the system under test. Reference date for 'today' is 2026-10-17.",
+ "conversations": [
+  {
+   "conv_id": "C001",
+   "category": "stock_check",
+   "difficulty": "easy",
+   "tags": [],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "Salam, black linen kurta M mein available hai?"
+    }
+   ],
+   "expected": {
+    "intent": "check_stock",
+    "entities": {
+     "items": [
+      {
+       "product": "Linen Kurta",
+       "color": "Black",
+       "size": "M",
+       "qty": null
+      }
+     ],
+     "location": null,
+     "order_id": null,
+     "phone": null,
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "check_stock",
+    "should_escalate": false,
+    "escalation_reason": null,
+    "expected_result": {
+     "in_stock": true,
+     "available": 12,
+     "price": 2499
+    }
+   }
+  },
+  {
+   "conv_id": "C002",
+   "category": "stock_check",
+   "difficulty": "hard",
+   "tags": [
+    "spelling_variants",
+    "multi_intent"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "bhai blk linen kurta mdm mein hai kya? price kya hai?"
+    }
+   ],
+   "expected": {
+    "intent": "check_stock",
+    "entities": {
+     "items": [
+      {
+       "product": "Linen Kurta",
+       "color": "Black",
+       "size": "M",
+       "qty": null
+      }
+     ],
+     "location": null,
+     "order_id": null,
+     "phone": null,
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "check_stock",
+    "should_escalate": false,
+    "escalation_reason": null,
+    "expected_result": {
+     "in_stock": true,
+     "available": 12,
+     "price": 2499
+    }
+   }
+  },
+  {
+   "conv_id": "C003",
+   "category": "stock_check",
+   "difficulty": "hard",
+   "tags": [
+    "out_of_stock"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "White cotton kurta medium chahiye, hai?"
+    }
+   ],
+   "expected": {
+    "intent": "check_stock",
+    "entities": {
+     "items": [
+      {
+       "product": "Cotton Kurta",
+       "color": "White",
+       "size": "M",
+       "qty": null
+      }
+     ],
+     "location": null,
+     "order_id": null,
+     "phone": null,
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "check_stock",
+    "should_escalate": false,
+    "escalation_reason": null,
+    "expected_result": {
+     "in_stock": false,
+     "available": 0,
+     "suggest_alternatives": true
+    }
+   }
+  },
+  {
+   "conv_id": "C004",
+   "category": "recommendation",
+   "difficulty": "easy",
+   "tags": [
+    "budget"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "Mujhe 2000 ke around koi acha kurta chahiye"
+    },
+    {
+     "speaker": "customer",
+     "text": "Men ke liye hai"
+    }
+   ],
+   "expected": {
+    "intent": "recommend",
+    "entities": {
+     "items": [],
+     "location": null,
+     "order_id": null,
+     "phone": null,
+     "budget": 2000,
+     "category": "Men Kurta"
+    },
+    "expected_action": "recommend",
+    "should_escalate": false,
+    "escalation_reason": null,
+    "expected_result": {
+     "price_range": [
+      1500,
+      2500
+     ],
+     "in_stock_only": true
+    }
+   }
+  },
+  {
+   "conv_id": "C005",
+   "category": "policy_question",
+   "difficulty": "easy",
+   "tags": [],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "Lahore mein COD hai? delivery charges kitne honge?"
+    }
+   ],
+   "expected": {
+    "intent": "policy_question",
+    "entities": {
+     "items": [],
+     "location": "Lahore",
+     "order_id": null,
+     "phone": null,
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "answer_policy",
+    "should_escalate": false,
+    "escalation_reason": null,
+    "expected_result": {
+     "cod": true,
+     "delivery_charge": 250
+    }
+   }
+  },
+  {
+   "conv_id": "C006",
+   "category": "policy_question",
+   "difficulty": "hard",
+   "tags": [
+    "context_reference"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "Karachi delivery kitne din mein hoti hai?"
+    },
+    {
+     "speaker": "customer",
+     "text": "aur charges?"
+    }
+   ],
+   "expected": {
+    "intent": "policy_question",
+    "entities": {
+     "items": [],
+     "location": "Karachi",
+     "order_id": null,
+     "phone": null,
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "answer_policy",
+    "should_escalate": false,
+    "escalation_reason": null,
+    "expected_result": {
+     "eta_days": [
+      4,
+      6
+     ],
+     "delivery_charge": 350
+    }
+   }
+  },
+  {
+   "conv_id": "C007",
+   "category": "order",
+   "difficulty": "easy",
+   "tags": [
+    "multi_turn"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "Black linen kurta M mein hai?"
+    },
+    {
+     "speaker": "customer",
+     "text": "2 order kar do"
+    },
+    {
+     "speaker": "customer",
+     "text": "Mera naam Ali Raza hai, 03001234567, house 12 street 4 Model Town Lahore"
+    },
+    {
+     "speaker": "customer",
+     "text": "Haan confirm"
+    }
+   ],
+   "expected": {
+    "intent": "place_order",
+    "entities": {
+     "items": [
+      {
+       "product": "Linen Kurta",
+       "color": "Black",
+       "size": "M",
+       "qty": 2
+      }
+     ],
+     "location": "Lahore",
+     "order_id": null,
+     "phone": "03001234567",
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "create_order",
+    "should_escalate": false,
+    "escalation_reason": null,
+    "expected_result": {
+     "order_created": true,
+     "product_total": 4998,
+     "delivery_charge": 250,
+     "grand_total": 5248,
+     "payment": "COD"
+    }
+   }
+  },
+  {
+   "conv_id": "C008",
+   "category": "order",
+   "difficulty": "hard",
+   "tags": [
+    "context_reference",
+    "multi_item",
+    "code_mixed"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "linen kurta black M ka kya rate hai?"
+    },
+    {
+     "speaker": "customer",
+     "text": "2 same bhej do aur ek white"
+    },
+    {
+     "speaker": "customer",
+     "text": "Usman Ghani, 03121112233, shop 5 Gulberg Lahore"
+    },
+    {
+     "speaker": "customer",
+     "text": "ji sahi hai bhej do"
+    }
+   ],
+   "expected": {
+    "intent": "place_order",
+    "entities": {
+     "items": [
+      {
+       "product": "Linen Kurta",
+       "color": "Black",
+       "size": "M",
+       "qty": 2
+      },
+      {
+       "product": "Linen Kurta",
+       "color": "White",
+       "size": "M",
+       "qty": 1
+      }
+     ],
+     "location": "Lahore",
+     "order_id": null,
+     "phone": "03121112233",
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "create_order",
+    "should_escalate": false,
+    "escalation_reason": null,
+    "expected_result": {
+     "order_created": true,
+     "product_total": 7497,
+     "delivery_charge": 250,
+     "grand_total": 7747,
+     "payment": "COD"
+    }
+   }
+  },
+  {
+   "conv_id": "C009",
+   "category": "order",
+   "difficulty": "hard",
+   "tags": [
+    "confirmation_required"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "Polo T-Shirt black M 1 chahiye, bhej do"
+    },
+    {
+     "speaker": "customer",
+     "text": "Zain Abbas 03005556677 house 8 Cantt Sialkot"
+    }
+   ],
+   "expected": {
+    "intent": "place_order",
+    "entities": {
+     "items": [
+      {
+       "product": "Polo T-Shirt",
+       "color": "Black",
+       "size": "M",
+       "qty": 1
+      }
+     ],
+     "location": "Sialkot",
+     "order_id": null,
+     "phone": "03005556677",
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "request_confirmation",
+    "should_escalate": false,
+    "escalation_reason": null,
+    "expected_result": {
+     "order_created": false,
+     "must_show_summary": true,
+     "grand_total": 1749
+    }
+   }
+  },
+  {
+   "conv_id": "C010",
+   "category": "order",
+   "difficulty": "hard",
+   "tags": [
+    "quantity_limit"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "Polo tshirt black M 25 pieces chahiye shop ke liye"
+    }
+   ],
+   "expected": {
+    "intent": "place_order",
+    "entities": {
+     "items": [
+      {
+       "product": "Polo T-Shirt",
+       "color": "Black",
+       "size": "M",
+       "qty": 25
+      }
+     ],
+     "location": null,
+     "order_id": null,
+     "phone": null,
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "escalate",
+    "should_escalate": true,
+    "escalation_reason": "quantity_above_limit",
+    "expected_result": {}
+   }
+  },
+  {
+   "conv_id": "C011",
+   "category": "stock_check",
+   "difficulty": "hard",
+   "tags": [
+    "insufficient_stock"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "Pashmina shawl maroon 5 chahiye"
+    }
+   ],
+   "expected": {
+    "intent": "check_stock",
+    "entities": {
+     "items": [
+      {
+       "product": "Pashmina Shawl",
+       "color": "Maroon",
+       "size": "Free",
+       "qty": 5
+      }
+     ],
+     "location": null,
+     "order_id": null,
+     "phone": null,
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "check_stock",
+    "should_escalate": false,
+    "escalation_reason": null,
+    "expected_result": {
+     "in_stock": true,
+     "available": 2,
+     "requested_exceeds_stock": true
+    }
+   }
+  },
+  {
+   "conv_id": "C012",
+   "category": "order_status",
+   "difficulty": "easy",
+   "tags": [
+    "multi_turn"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "Mera order kahan hai?"
+    },
+    {
+     "speaker": "customer",
+     "text": "order number 10231"
+    },
+    {
+     "speaker": "customer",
+     "text": "03001234567"
+    }
+   ],
+   "expected": {
+    "intent": "order_status",
+    "entities": {
+     "items": [],
+     "location": null,
+     "order_id": "10231",
+     "phone": "03001234567",
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "get_order_status",
+    "should_escalate": false,
+    "escalation_reason": null,
+    "expected_result": {
+     "status": "Shipped",
+     "courier": "TCS",
+     "tracking_no": "TCS884201"
+    }
+   }
+  },
+  {
+   "conv_id": "C013",
+   "category": "order_status",
+   "difficulty": "hard",
+   "tags": [
+    "privacy",
+    "wrong_phone"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "order 10231 ka status batao"
+    },
+    {
+     "speaker": "customer",
+     "text": "mera number 03459998888 hai"
+    }
+   ],
+   "expected": {
+    "intent": "order_status",
+    "entities": {
+     "items": [],
+     "location": null,
+     "order_id": "10231",
+     "phone": "03459998888",
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "deny_status_mismatch",
+    "should_escalate": false,
+    "escalation_reason": null,
+    "expected_result": {
+     "share_details": false
+    }
+   }
+  },
+  {
+   "conv_id": "C014",
+   "category": "exchange",
+   "difficulty": "easy",
+   "tags": [
+    "multi_turn"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "Mujhe exchange karna hai, size chota hai"
+    },
+    {
+     "speaker": "customer",
+     "text": "order 10198"
+    },
+    {
+     "speaker": "customer",
+     "text": "03214567890"
+    },
+    {
+     "speaker": "customer",
+     "text": "L size chahiye"
+    }
+   ],
+   "expected": {
+    "intent": "exchange",
+    "entities": {
+     "items": [
+      {
+       "product": "Printed Kurti",
+       "color": "Pink",
+       "size": "L",
+       "qty": 1
+      }
+     ],
+     "location": null,
+     "order_id": "10198",
+     "phone": "03214567890",
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "create_exchange",
+    "should_escalate": false,
+    "escalation_reason": null,
+    "expected_result": {
+     "eligible": true,
+     "days_since_delivery": 3,
+     "replacement_sku": "SKU0303",
+     "exchange_courier_charge": 250
+    }
+   }
+  },
+  {
+   "conv_id": "C015",
+   "category": "exchange",
+   "difficulty": "hard",
+   "tags": [
+    "sale_item"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "order 10120 ka exchange karna hai"
+    },
+    {
+     "speaker": "customer",
+     "text": "03335551234"
+    },
+    {
+     "speaker": "customer",
+     "text": "L size chahiye"
+    }
+   ],
+   "expected": {
+    "intent": "exchange",
+    "entities": {
+     "items": [
+      {
+       "product": "Wash & Wear Kurta",
+       "color": "White",
+       "size": "L",
+       "qty": 1
+      }
+     ],
+     "location": null,
+     "order_id": "10120",
+     "phone": "03335551234",
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "escalate",
+    "should_escalate": true,
+    "escalation_reason": "sale_item_not_exchangeable",
+    "expected_result": {}
+   }
+  },
+  {
+   "conv_id": "C016",
+   "category": "exchange",
+   "difficulty": "hard",
+   "tags": [
+    "outside_window"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "Maine 12 din pehle suit liya tha, size exchange karna hai"
+    },
+    {
+     "speaker": "customer",
+     "text": "order 10044, phone 03451239876"
+    },
+    {
+     "speaker": "customer",
+     "text": "L chahiye"
+    }
+   ],
+   "expected": {
+    "intent": "exchange",
+    "entities": {
+     "items": [
+      {
+       "product": "Lawn 3-Piece Stitched",
+       "color": "Pink",
+       "size": "L",
+       "qty": 1
+      }
+     ],
+     "location": null,
+     "order_id": "10044",
+     "phone": "03451239876",
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "escalate",
+    "should_escalate": true,
+    "escalation_reason": "outside_7_day_window",
+    "expected_result": {}
+   }
+  },
+  {
+   "conv_id": "C017",
+   "category": "refund_complaint",
+   "difficulty": "easy",
+   "tags": [
+    "damaged",
+    "refund"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "Mera shawl phat gaya hai aur mujhe refund chahiye"
+    },
+    {
+     "speaker": "customer",
+     "text": "order 10150"
+    }
+   ],
+   "expected": {
+    "intent": "refund",
+    "entities": {
+     "items": [],
+     "location": null,
+     "order_id": "10150",
+     "phone": null,
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "escalate",
+    "should_escalate": true,
+    "escalation_reason": "damaged_item_refund",
+    "expected_result": {}
+   }
+  },
+  {
+   "conv_id": "C018",
+   "category": "refund_complaint",
+   "difficulty": "hard",
+   "tags": [
+    "angry",
+    "legal_threat"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "Ye kya bakwas service hai!! 5 din ho gaye order nahi aaya, main consumer court jaunga"
+    }
+   ],
+   "expected": {
+    "intent": "complaint",
+    "entities": {
+     "items": [],
+     "location": null,
+     "order_id": null,
+     "phone": null,
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "escalate",
+    "should_escalate": true,
+    "escalation_reason": "angry_customer_legal_threat",
+    "expected_result": {}
+   }
+  },
+  {
+   "conv_id": "C019",
+   "category": "handoff_request",
+   "difficulty": "easy",
+   "tags": [
+    "human_requested"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "mujhe kisi insan se baat karni hai, owner se connect karo"
+    }
+   ],
+   "expected": {
+    "intent": "human_request",
+    "entities": {
+     "items": [],
+     "location": null,
+     "order_id": null,
+     "phone": null,
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "escalate",
+    "should_escalate": true,
+    "escalation_reason": "customer_requested_human",
+    "expected_result": {}
+   }
+  },
+  {
+   "conv_id": "C020",
+   "category": "order",
+   "difficulty": "hard",
+   "tags": [
+    "cod_limit",
+    "multi_turn"
+   ],
+   "turns": [
+    {
+     "speaker": "customer",
+     "text": "Black chiffon party wear M 4 chahiye"
+    },
+    {
+     "speaker": "customer",
+     "text": "Nida Rauf 03041112222 DHA phase 5 Lahore"
+    },
+    {
+     "speaker": "customer",
+     "text": "haan confirm"
+    }
+   ],
+   "expected": {
+    "intent": "place_order",
+    "entities": {
+     "items": [
+      {
+       "product": "Chiffon Party Wear",
+       "color": "Black",
+       "size": "M",
+       "qty": 4
+      }
+     ],
+     "location": "Lahore",
+     "order_id": null,
+     "phone": "03041112222",
+     "budget": null,
+     "category": null
+    },
+    "expected_action": "escalate",
+    "should_escalate": true,
+    "escalation_reason": "cod_above_limit",
+    "expected_result": {
+     "grand_total": 31996
+    }
+   }
+  }
+ ]
+}

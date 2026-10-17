@@ -1,0 +1,61 @@
+import json
+LN=("Linen Kurta","Black","M")
+def it(p,c,s,q): return {"product":p,"color":c,"size":s,"qty":q}
+def E(items=None,location=None,order_id=None,phone=None,budget=None,category=None):
+    return {"items":items or [],"location":location,"order_id":order_id,"phone":phone,"budget":budget,"category":category}
+def C(cid,cat,diff,tags,turns,intent,ent,action,esc=False,reason=None,result=None):
+    return {"conv_id":cid,"category":cat,"difficulty":diff,"tags":tags,
+      "turns":[{"speaker":"customer","text":t} for t in turns],
+      "expected":{"intent":intent,"entities":ent,"expected_action":action,
+                  "should_escalate":esc,"escalation_reason":reason,"expected_result":result or {}}}
+convs=[
+C("C001","stock_check","easy",[],["Salam, black linen kurta M mein available hai?"],"check_stock",
+  E([it("Linen Kurta","Black","M",None)]),"check_stock",result={"in_stock":True,"available":12,"price":2499}),
+C("C002","stock_check","hard",["spelling_variants","multi_intent"],["bhai blk linen kurta mdm mein hai kya? price kya hai?"],"check_stock",
+  E([it("Linen Kurta","Black","M",None)]),"check_stock",result={"in_stock":True,"available":12,"price":2499}),
+C("C003","stock_check","hard",["out_of_stock"],["White cotton kurta medium chahiye, hai?"],"check_stock",
+  E([it("Cotton Kurta","White","M",None)]),"check_stock",result={"in_stock":False,"available":0,"suggest_alternatives":True}),
+C("C004","recommendation","easy",["budget"],["Mujhe 2000 ke around koi acha kurta chahiye","Men ke liye hai"],"recommend",
+  E(budget=2000,category="Men Kurta"),"recommend",result={"price_range":[1500,2500],"in_stock_only":True}),
+C("C005","policy_question","easy",[],["Lahore mein COD hai? delivery charges kitne honge?"],"policy_question",
+  E(location="Lahore"),"answer_policy",result={"cod":True,"delivery_charge":250}),
+C("C006","policy_question","hard",["context_reference"],["Karachi delivery kitne din mein hoti hai?","aur charges?"],"policy_question",
+  E(location="Karachi"),"answer_policy",result={"eta_days":[4,6],"delivery_charge":350}),
+C("C007","order","easy",["multi_turn"],["Black linen kurta M mein hai?","2 order kar do",
+  "Mera naam Ali Raza hai, 03001234567, house 12 street 4 Model Town Lahore","Haan confirm"],"place_order",
+  E([it(*LN,2)],location="Lahore",phone="03001234567"),"create_order",result={"order_created":True,"product_total":4998,"delivery_charge":250,"grand_total":5248,"payment":"COD"}),
+C("C008","order","hard",["context_reference","multi_item","code_mixed"],["linen kurta black M ka kya rate hai?","2 same bhej do aur ek white",
+  "Usman Ghani, 03121112233, shop 5 Gulberg Lahore","ji sahi hai bhej do"],"place_order",
+  E([it(*LN,2),it("Linen Kurta","White","M",1)],location="Lahore",phone="03121112233"),"create_order",
+  result={"order_created":True,"product_total":7497,"delivery_charge":250,"grand_total":7747,"payment":"COD"}),
+C("C009","order","hard",["confirmation_required"],["Polo T-Shirt black M 1 chahiye, bhej do","Zain Abbas 03005556677 house 8 Cantt Sialkot"],"place_order",
+  E([it("Polo T-Shirt","Black","M",1)],location="Sialkot",phone="03005556677"),"request_confirmation",
+  result={"order_created":False,"must_show_summary":True,"grand_total":1749}),
+C("C010","order","hard",["quantity_limit"],["Polo tshirt black M 25 pieces chahiye shop ke liye"],"place_order",
+  E([it("Polo T-Shirt","Black","M",25)]),"escalate",True,"quantity_above_limit"),
+C("C011","stock_check","hard",["insufficient_stock"],["Pashmina shawl maroon 5 chahiye"],"check_stock",
+  E([it("Pashmina Shawl","Maroon","Free",5)]),"check_stock",result={"in_stock":True,"available":2,"requested_exceeds_stock":True}),
+C("C012","order_status","easy",["multi_turn"],["Mera order kahan hai?","order number 10231","03001234567"],"order_status",
+  E(order_id="10231",phone="03001234567"),"get_order_status",result={"status":"Shipped","courier":"TCS","tracking_no":"TCS884201"}),
+C("C013","order_status","hard",["privacy","wrong_phone"],["order 10231 ka status batao","mera number 03459998888 hai"],"order_status",
+  E(order_id="10231",phone="03459998888"),"deny_status_mismatch",result={"share_details":False}),
+C("C014","exchange","easy",["multi_turn"],["Mujhe exchange karna hai, size chota hai","order 10198","03214567890","L size chahiye"],"exchange",
+  E([it("Printed Kurti","Pink","L",1)],order_id="10198",phone="03214567890"),"create_exchange",
+  result={"eligible":True,"days_since_delivery":3,"replacement_sku":"SKU0303","exchange_courier_charge":250}),
+C("C015","exchange","hard",["sale_item"],["order 10120 ka exchange karna hai","03335551234","L size chahiye"],"exchange",
+  E([it("Wash & Wear Kurta","White","L",1)],order_id="10120",phone="03335551234"),"escalate",True,"sale_item_not_exchangeable"),
+C("C016","exchange","hard",["outside_window"],["Maine 12 din pehle suit liya tha, size exchange karna hai","order 10044, phone 03451239876","L chahiye"],"exchange",
+  E([it("Lawn 3-Piece Stitched","Pink","L",1)],order_id="10044",phone="03451239876"),"escalate",True,"outside_7_day_window"),
+C("C017","refund_complaint","easy",["damaged","refund"],["Mera shawl phat gaya hai aur mujhe refund chahiye","order 10150"],"refund",
+  E(order_id="10150"),"escalate",True,"damaged_item_refund"),
+C("C018","refund_complaint","hard",["angry","legal_threat"],["Ye kya bakwas service hai!! 5 din ho gaye order nahi aaya, main consumer court jaunga"],"complaint",
+  E(),"escalate",True,"angry_customer_legal_threat"),
+C("C019","handoff_request","easy",["human_requested"],["mujhe kisi insan se baat karni hai, owner se connect karo"],"human_request",
+  E(),"escalate",True,"customer_requested_human"),
+C("C020","order","hard",["cod_limit","multi_turn"],["Black chiffon party wear M 4 chahiye","Nida Rauf 03041112222 DHA phase 5 Lahore","haan confirm"],"place_order",
+  E([it("Chiffon Party Wear","Black","M",4)],location="Lahore",phone="03041112222"),"escalate",True,"cod_above_limit",
+  result={"grand_total":31996}),
+]
+json.dump({"_note":"Customer turns only. Agent replies are produced by the system under test. Reference date for 'today' is 2026-10-17.","conversations":convs},
+          open("conversations_sample.json","w",encoding="utf-8"),ensure_ascii=False,indent=1)
+print(len(convs),"conversations written")
